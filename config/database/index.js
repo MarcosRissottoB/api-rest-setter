@@ -1,12 +1,19 @@
 const mongoose = require("mongoose");
 
 const uriDB = "mongodb://localhost/setterDB"
-mongoose.connect(uriDB);
-const db = mongoose.connection
+const connectDB = async () => {
+    try {
+        await mongoose.connect(uriDB, {
+            useNewUrlParser: true,
+            useCreateIndex: true,
+            useFindAndModify: false,
+            useUnifiedTopology: true
+        });
+        console.log('Mongodb is connected');
+    } catch (err) {
+        console.error(err.message);
+        process.exit(1);
+    }
+};
 
-db.on('error', console.error.bind(console, 'connection error'));
-db.once('open', function callback() {
-    console.log('Connection with database succeeded.');
-});
-
-exports.db = db;
+module.exports = connectDB;

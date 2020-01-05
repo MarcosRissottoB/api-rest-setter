@@ -14,7 +14,6 @@ const rates = async (base, symbols) => {
     const url = `${BASE_URL_FIXER}latest?access_key=${FIXER_API_KEY}&base=${base}&symbols=${symbols}`
     const response = await axios.get(url)
     const rates = response.data.rates
-    // const exchangeDB = new ExchangeDB()
     Object.entries(rates).forEach(([key, value]) => {
         const exchange = ExchangeDB.findOneAndUpdate({ pair: `${base}/${key}` })
         if (!exchange) {

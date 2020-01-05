@@ -7,12 +7,12 @@ module.exports =
         {
             method: "GET",
             path: "/exchange",
-            handler: RatesController.exchange
+            handler: RatesController.getExchange
         },
         {
             method: "GET",
             path: "/rate_details",
-            handler: RatesController.rateDetails
+            handler: RatesController.getRateDetails
         },
         {
             method: "POST",

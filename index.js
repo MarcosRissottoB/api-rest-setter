@@ -2,6 +2,7 @@
 
 const hapi = require("hapi")
 const routes = require('./routes/routes')
+const connectDB = require('./config/database/index');
 
 const server = hapi.server({
     port: process.env.PORT || 3000,
@@ -11,6 +12,7 @@ const server = hapi.server({
 const init = async () => {
     try {
         server.route(routes)
+        connectDB();
         await server.start()
     } catch (error) {
         console.error(error)
