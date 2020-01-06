@@ -35,13 +35,22 @@ const createRate = async (req, h) => {
         const originalRate = serchAndUpdatedExchange.rates[symbol]
         const feeAmount = originalRate * feeConvertToNumber
         const finalRate = originalRate + feeAmount
-        const updatedData = {
+        const pairData = {
             fee: feeConvertToNumber,
             feeAmount,
             finalRate,
+            originalRate,
+            pair: `${base}/${symbol}`
         }
-        const updatedExchange = await Exchange.findOneAndUpdate({ pair: `${base}/${symbol}` }, updatedData)
-        return h.response({ 'Created rate...': updatedExchange }).code(200)
+
+        let existingPair = await Exchange.findOne({ pair: `${base}/${symbol}` })
+        if (existingPair) {
+            existingPair = await Exchange.findOneAndUpdate({ pair: `${base}/${symbol}` }, pairData)
+            return h.response({ 'Created rate...': existingPair }).code(200)
+        }
+
+        const newPair = await Exchange.create(pairData)
+        return h.response({ 'Created rate...': newPair }).code(200)
     } catch (error) {
         console.log(error)
         return h.response({ 'Error': error }).code(500)
